@@ -35,17 +35,17 @@ Tile.prototype.equi2iso = function(){
   this.id[0]='iso';
   this.bounds[2] = (this.bounds[2]-this.bounds[0]) * 2 * Math.cos(Math.PI/6) + this.bounds[0];
   this.bounds[3] = (this.bounds[3]-this.bounds[1]) * 2 * Math.cos(Math.PI/6) + this.bounds[1];
-  this.bounds[4] = ((this.bounds[2]-this.bounds[0]) * Math.cos(Math.PI/6) - (this.bounds[3]-this.bounds[1]) * Math.sin(Math.PI/6) + this.bounds[0])/(2* Math.cos(Math.PI/6));
-  this.bounds[5] = ((this.bounds[3]-this.bounds[1]) * Math.cos(Math.PI/6) + (this.bounds[2]-this.bounds[0]) * Math.sin(Math.PI/6) + this.bounds[1])/(2* Math.cos(Math.PI/6));
+  this.bounds[4] = ((this.bounds[2]-this.bounds[0]) * Math.cos(Math.PI/6) - (this.bounds[3]-this.bounds[1]) * Math.sin(Math.PI/6))/(2* Math.cos(Math.PI/6)) + this.bounds[0];
+  this.bounds[5] = ((this.bounds[3]-this.bounds[1]) * Math.cos(Math.PI/6) + (this.bounds[2]-this.bounds[0]) * Math.sin(Math.PI/6))/(2* Math.cos(Math.PI/6)) + this.bounds[1];
 }
 
 // convert iso to equi ----> A revoir
 Tile.prototype.iso2equi = function(){
   this.id[0]='equi';
-  this.bounds[2] = -(this.bounds[0]-this.bounds[2]) / (2 * Math.cos(Math.PI/6)) + this.bounds[0];
-  this.bounds[3] = -(this.bounds[1]-this.bounds[3]) / (2 * Math.cos(Math.PI/6)) + this.bounds[1];
-  //this.bounds[4] = Math.cos(Math.PI/3) * (-this.bounds[0]+this.bounds[2])/(2*Math.cos(Math.PI/6)) - Math.sin(Math.PI/3) * (-this.bounds[1]+this.bounds[3])/(2*Math.cos(Math.PI/6));
-  //this.bounds[5] = Math.sin(Math.PI/3) * (-this.bounds[0]+this.bounds[2])/(2*Math.cos(Math.PI/6)) + Math.cos(Math.PI/3) * (-this.bounds[1]+this.bounds[3])/(2*Math.cos(Math.PI/6));
+  this.bounds[2] = (this.bounds[2]-this.bounds[0]) / ((2 * Math.cos(Math.PI/6))*(2 * Math.cos(Math.PI/6))*(2 * Math.cos(Math.PI/6))) + this.bounds[0];
+  this.bounds[3] = (this.bounds[3]-this.bounds[1]) / ((2 * Math.cos(Math.PI/6))*(2 * Math.cos(Math.PI/6))*(2 * Math.cos(Math.PI/6))) + this.bounds[1];
+  this.bounds[4] = ((this.bounds[2]-this.bounds[0]) * Math.cos(Math.PI/3) - (this.bounds[3]-this.bounds[1]) * Math.sin(Math.PI/3)) / (2* Math.cos(Math.PI/6)) + this.bounds[0];
+  this.bounds[5] = ((this.bounds[3]-this.bounds[1]) * Math.cos(Math.PI/3) + (this.bounds[2]-this.bounds[0]) * Math.sin(Math.PI/3)) / (2* Math.cos(Math.PI/6)) + this.bounds[1];
 }
 
 
@@ -102,7 +102,7 @@ function substitutionEq(tile){
 	  // new iso 1 (droit)
 	  var newiso4 = tile.myclone();
 	  newiso4.id.push('iso4');
-	  //newiso4.scale(tile.bounds[0],tile.bounds[1],1/phi);
+	  newiso4.scale(tile.bounds[0],tile.bounds[1],1/phi);
 	  //newiso4.rotate(tile.bounds[0],tile.bounds[1],2*Math.PI/3);
       //newiso4.shift(tile.bounds[2]-tile.bounds[0],tile.bounds[3]-tile.bounds[1]);
       newtiles.push(newiso4);
@@ -110,7 +110,7 @@ function substitutionEq(tile){
 	  // new iso 2 (gauche)
 	  var newiso5 = tile.myclone();
 	  newiso5.id.push('iso5');
-	  //newiso5.scale(tile.bounds[0],tile.bounds[1],1/phi);
+	  newiso5.scale(tile.bounds[0],tile.bounds[1],1/phi);
 	  //newiso5.rotate(tile.bounds[0],tile.bounds[1],-2*Math.PI/3);
       //newiso5.shift(tile.bounds[0]-tile.bounds[4],tile.bounds[1]-tile.bounds[5]);
       newtiles.push(newiso5);
@@ -434,7 +434,7 @@ Tiling.equithirdsSubstitution = function({iterations}={}){
 	var tiles = [];
 	//for(var i=0; i<5; i++){
       // construct tiles
-      var myequi = equi.myclone();
+      var myequi = iso.myclone();
       myequi.id.push(0);
       //myequi.rotate(0,0,i*2*Math.PI/5);
       // define neighbors with undefined on the boundary
