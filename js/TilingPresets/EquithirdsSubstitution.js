@@ -35,8 +35,8 @@ Tile.prototype.equi2iso = function(){
   this.id[0]='iso';
   this.bounds[2] = (this.bounds[2]-this.bounds[0]) * 2 * Math.cos(Math.PI/6) + this.bounds[0];
   this.bounds[3] = (this.bounds[3]-this.bounds[1]) * 2 * Math.cos(Math.PI/6) + this.bounds[1];
-  this.bounds[4] = (this.bounds[2]-this.bounds[0]) * Math.cos(Math.PI/6) - (this.bounds[3]-this.bounds[1]) * Math.sin(Math.PI/6) + this.bounds[0]; // -> A revoir
-  this.bounds[5] = (this.bounds[3]-this.bounds[1]) * Math.cos(Math.PI/6) + (this.bounds[2]-this.bounds[0]) * Math.sin(Math.PI/6) + this.bounds[1];
+  this.bounds[4] = ((this.bounds[2]-this.bounds[0]) * Math.cos(Math.PI/6) - (this.bounds[3]-this.bounds[1]) * Math.sin(Math.PI/6) + this.bounds[0])/(2* Math.cos(Math.PI/6));
+  this.bounds[5] = ((this.bounds[3]-this.bounds[1]) * Math.cos(Math.PI/6) + (this.bounds[2]-this.bounds[0]) * Math.sin(Math.PI/6) + this.bounds[1])/(2* Math.cos(Math.PI/6));
 }
 
 // convert iso to equi ----> A revoir
@@ -75,7 +75,7 @@ function substitutionEq(tile){
 	  newiso2.id.push('iso2');
 	  newiso2.scale(tile.bounds[0],tile.bounds[1],1/phi);
 	  newiso2.rotate(tile.bounds[0],tile.bounds[1],2*Math.PI/3);
-      newiso2.shift(tile.bounds[2]-tile.bounds[0],tile.bounds[3]-tile.bounds[1]);
+	  newiso2.shift(tile.bounds[2]-tile.bounds[0],tile.bounds[3]-tile.bounds[1]);
       newtiles.push(newiso2);
 
 	  // new iso 3 (gauche)
