@@ -342,7 +342,7 @@ Tiling.doubleHalfhexVarbysubst = function({iterations}={}){
   tiles = substitute(
     iterations,
     tiles,
-    1,
+    phi,
     substitutionDoubleHalfhex,
     [], // no duplicated tiles
     [], // no duplicated tiles
