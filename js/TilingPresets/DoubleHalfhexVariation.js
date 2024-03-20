@@ -1,3 +1,11 @@
+// Double Halfhex Variation
+// substitution, variation from this one described at
+// https://tilings.math.uni-bielefeld.de/substitution/equithirds/
+//
+// New rules for the moment :
+// Small Halfhex (red) divided in 4 bug (yellow) halfhex
+// Big Halfex (yellow) divided in 16 (red) halfhex
+
 //
 // [0] toolbox
 //
@@ -39,7 +47,7 @@ function substitutionDoubleHalfhex(tile){
     case 'small':
       //
       // -------------------------------
-      // small substitution -> 4 big halfhexs
+      // small substitution -> 16 big halfhexs
       // -------------------------------
       //
       var newtiles = [];
@@ -248,7 +256,7 @@ function substitutionDoubleHalfhex(tile){
     case 'big':
       //
       // -------------------------------
-      // big substitution -> 4 small halfhexs
+      // big substitution -> 4 small halfhex
       // -------------------------------
       //
       var newtiles = [];
@@ -306,8 +314,6 @@ function substitutionDoubleHalfhex(tile){
 //
 // [3] no duplicated tiles
 //
-
-var duplicatedHalfhex = [];
 
 //
 // [4] I am lazy
