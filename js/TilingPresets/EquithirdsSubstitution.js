@@ -18,9 +18,12 @@ var phi = (1+Math.sqrt(5))/2;
 
 // equi
 var bounds = [];
-bounds.push(0,0); // Gauche
+/*bounds.push(0,0); // Gauche
 bounds.push(1,0); // Droite
-bounds.push(0.5,Math.sin(Math.PI/3)); // Haut
+bounds.push(0.5,Math.sin(Math.PI/3)); // Haut*/
+bounds.push(-0.5,-Math.cos(Math.PI/3)*(0.5/Math.sin(Math.PI /3))); // Gauche
+bounds.push(0.5,-Math.cos(Math.PI/3)*(0.5/Math.sin(Math.PI /3))); // Droite
+bounds.push(0,0.5/Math.sin(Math.PI /3)); // Haut
 var equi = new Tile(['equi'],[],bounds,3);
 
 // iso
