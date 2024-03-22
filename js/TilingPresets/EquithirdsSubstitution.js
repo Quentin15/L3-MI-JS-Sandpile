@@ -18,9 +18,6 @@ var phi = (1+Math.sqrt(5))/2;
 
 // equi
 var bounds = [];
-/*bounds.push(0,0); // Gauche
-bounds.push(1,0); // Droite
-bounds.push(0.5,Math.sin(Math.PI/3)); // Haut*/
 bounds.push(-0.5,-Math.cos(Math.PI/3)*(0.5/Math.sin(Math.PI /3))); // Gauche
 bounds.push(0.5,-Math.cos(Math.PI/3)*(0.5/Math.sin(Math.PI /3))); // Droite
 bounds.push(0,0.5/Math.sin(Math.PI /3)); // Haut
@@ -28,9 +25,9 @@ var equi = new Tile(['equi'],[],bounds,3);
 
 // iso
 var bounds = [];
-bounds.push(0,0);
-bounds.push(2*Math.cos(Math.PI/6),0);
-bounds.push(Math.cos(Math.PI/6),Math.sin(Math.PI/6));
+bounds.push(-Math.cos(Math.PI/6),-Math.sin(Math.PI/6)/2);
+bounds.push(Math.cos(Math.PI/6),-Math.sin(Math.PI/6)/2);
+bounds.push(0,Math.sin(Math.PI/6)/2);
 var iso = new Tile(['iso'],[],bounds,3);
 
 // convert equi to iso
