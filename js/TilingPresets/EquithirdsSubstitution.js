@@ -163,27 +163,19 @@ neighbors2boundsEq.set('iso',default_neighbors2bounds(3));
 //
 
 // prepare decoration
-decorateP2 = new Map();
-decorateP2.set('equi',0);
-decorateP2.set('iso',1);
+decorateEq = new Map();
+decorateEq.set('equi',0);
+decorateEq.set('iso',1);
 
 //
 // [7.1] construct "Equithirds" tiling by substitution
 // 
 Tiling.equithirdsSubstitution = function({iterations}={}){
 	var tiles = [];
-	//for(var i=0; i<5; i++){
-      // construct tiles
-      var myequi = equi.myclone();
-      myequi.id.push(0);
-      //myequi.rotate(0,0,i*2*Math.PI/5);
-      // define neighbors with undefined on the boundary
-      /*mykite.neighbors.push(['kite',(i-1+5)%5]); // 0
-      mykite.neighbors.push(undefined); // 1
-      mykite.neighbors.push(undefined); // 2
-      mykite.neighbors.push(['kite',(i+1)%5]); // 3*/
-      tiles.push(myequi);
-    //}
+    var myequi = equi.myclone();
+    myequi.id.push(0);
+    tiles.push(myequi);
+
     // call the substitution
     tiles = substitute(
       iterations,
@@ -194,7 +186,7 @@ Tiling.equithirdsSubstitution = function({iterations}={}){
       duplicatedEqoriented,
       "I am lazy",
       neighbors2boundsEq,
-      decorateP2
+      decorateEq
     );
     // construct tiling
     return new Tiling(tiles);
