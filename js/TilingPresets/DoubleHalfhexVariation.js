@@ -1,10 +1,10 @@
 // Double Halfhex Variation
 // substitution, variation from this one described at
-// https://tilings.math.uni-bielefeld.de/substitution/equithirds/
+// https://tilings.math.uni-bielefeld.de/substitution/double-halfhex-variation/
 //
 // New rules for the moment :
-// Small Halfhex (red) divided in 4 bug (yellow) halfhex
-// Big Halfex (yellow) divided in 16 (red) halfhex
+// Small Halfhex (red) divided in 4 big (yellow) halfhex
+// Big Halfex (yellow) divided in 16 small (red) halfhex
 
 //
 // [0] toolbox
@@ -14,29 +14,39 @@
 // sqrt(3)
 var sqrt3 = Math.sqrt(3);
 
+// golden ratio
+var phi = (1 + Math.sqrt(5))/2;
+
 //
 // [1] define tile types double halfhex
 //
 
 // small halfhex
 var bounds = [];
-bounds.push(-4, -sqrt3);
-bounds.push(-2, sqrt3);
-bounds.push(2, sqrt3);
-bounds.push(4, -sqrt3);
+bounds.push(-1, -sqrt3/4);
+bounds.push(-0.5, sqrt3/4);
+bounds.push(0.5, sqrt3/4);
+bounds.push(1, -sqrt3/4);
 var small = new Tile(['small'],[],bounds,4);
 
 // big halfhex
+var bounds = [];
+bounds.push(-2, -sqrt3/2);
+bounds.push(-1, sqrt3/2);
+bounds.push(1, sqrt3/2);
+bounds.push(2, -sqrt3/2);
 var big = new Tile(['big'],[],bounds,4);
 
 // convert a small halfhex to a big halfhex
 Tile.prototype.small2big = function(){
   this.id[0]='big';
+  this.scale(this.bounds[0], this.bounds[1], 2);
 }
 
 // convert a big halfhex to a small halfhex
 Tile.prototype.big2small = function(){
   this.id[0]='small';
+  this.scale(this.bounds[0], this.bounds[1], 1/2);
 }
 
 //
@@ -69,26 +79,26 @@ function substitutionDoubleHalfhex(tile){
       var newBig0 = tile.myclone();
       newBig0.id.push('b0');
       newBig0.small2big();
-      newBig0.scale(newBig0.bounds[0], newBig0.bounds[1], 1/4);
+      newBig0.scale(newBig0.bounds[0], newBig0.bounds[1], 1/phi);
       newBig0.rotate(newBig0.bounds[6], newBig0.bounds[7], -Math.PI/3);
-      newBig0.shift(s60/2, s71/2);
+      //newBig0.shift(s60/2, s71/2);
       newtiles.push(newBig0);
 
       // new big halfhex (bottom one)
       var newBig1 = tile.myclone();
       newBig1.id.push('b1');
       newBig1.small2big();
-      newBig1.scale(newBig1.bounds[0], newBig1.bounds[1], 1/4);
+      newBig1.scale(newBig1.bounds[0], newBig1.bounds[1], 1/phi);
       var b60 = newBig1.bounds[6] - newBig1.bounds[0];
       var b71 = newBig1.bounds[7] - newBig1.bounds[1];
-      newBig1.shift(s60 - b60, s71 - b71);
+      //newBig1.shift(s60 - b60, s71 - b71);
       newtiles.push(newBig1);
 
-      // new big halfhex (right one)
+      /*// new big halfhex (right one)
       var newBig2 = tile.myclone();
       newBig2.id.push('b2');
       newBig2.small2big();
-      newBig2.scale(newBig2.bounds[0], newBig2.bounds[1], 1/4);
+      newBig2.scale(newBig2.bounds[0], newBig2.bounds[1], 1/phi);
       newBig2.rotate(newBig2.bounds[0], newBig2.bounds[1], 2*Math.PI/3);
       var b64 = newBig2.bounds[6] - newBig2.bounds[4];
       var b75 = newBig2.bounds[7] - newBig2.bounds[5];
@@ -101,12 +111,12 @@ function substitutionDoubleHalfhex(tile){
       var newBig3 = tile.myclone();
       newBig3.id.push('b3');
       newBig3.small2big();
-      newBig3.scale(newBig3.bounds[0], newBig3.bounds[1], 1/4);
+      newBig3.scale(newBig3.bounds[0], newBig3.bounds[1], 1/phi);
       newBig3.rotate(newBig3.bounds[0], newBig3.bounds[1], -2*Math.PI/3);
       newBig3.shift(s20 + s42, s31 + s53);
-      newtiles.push(newBig3);
+      newtiles.push(newBig3);*/
 
-
+      /*
       //
       // Bottom big halfhexs
       //
@@ -115,7 +125,7 @@ function substitutionDoubleHalfhex(tile){
       var newBig4 = tile.myclone();
       newBig4.id.push('b4');
       newBig4.small2big();
-      newBig4.scale(newBig4.bounds[0], newBig4.bounds[1], 1/4);
+      newBig4.scale(newBig4.bounds[0], newBig4.bounds[1], 1/phi);
       newBig4.rotate(newBig4.bounds[6], newBig4.bounds[7], -2*Math.PI/3);
       newtiles.push(newBig4);
 
@@ -123,7 +133,7 @@ function substitutionDoubleHalfhex(tile){
       var newBig5 = tile.myclone();
       newBig5.id.push('b5');
       newBig5.small2big();
-      newBig5.scale(newBig5.bounds[0], newBig5.bounds[1], 1/4);
+      newBig5.scale(newBig5.bounds[0], newBig5.bounds[1], 1/phi);
       b60 = newBig5.bounds[6] - newBig5.bounds[0];
       b71 = newBig5.bounds[7] - newBig5.bounds[1];
       newBig5.shift(s60/2 - b60/2, s71/2 - b71/2);
@@ -133,7 +143,7 @@ function substitutionDoubleHalfhex(tile){
       var newBig6 = tile.myclone();
       newBig6.id.push('b6');
       newBig6.small2big();
-      newBig6.scale(newBig6.bounds[0], newBig6.bounds[1], 1/4);
+      newBig6.scale(newBig6.bounds[0], newBig6.bounds[1], 1/phi);
       b60 = newBig6.bounds[6] - newBig6.bounds[0];
       b71 = newBig6.bounds[7] - newBig6.bounds[1];
       newBig6.shift(s60 - b60, s71 - b71);
@@ -144,7 +154,7 @@ function substitutionDoubleHalfhex(tile){
       var newBig7 = tile.myclone();
       newBig7.id.push('b7');
       newBig7.small2big();
-      newBig7.scale(newBig7.bounds[0], newBig7.bounds[1], 1/4);
+      newBig7.scale(newBig7.bounds[0], newBig7.bounds[1], 1/phi);
       newBig7.rotate(newBig7.bounds[0], newBig7.bounds[1], Math.PI);
       var b06 = newBig7.bounds[0] - newBig7.bounds[6];
       var b17 = newBig7.bounds[1] - newBig7.bounds[7];
@@ -162,7 +172,7 @@ function substitutionDoubleHalfhex(tile){
       var newBig8 = tile.myclone();
       newBig8.id.push('b8');
       newBig8.small2big();
-      newBig8.scale(newBig8.bounds[0], newBig8.bounds[1], 1/4);
+      newBig8.scale(newBig8.bounds[0], newBig8.bounds[1], 1/phi);
       b20 = newBig8.bounds[2] - newBig8.bounds[0];
       b31 = newBig8.bounds[3] - newBig8.bounds[1];
       newBig8.rotate(newBig8.bounds[0], newBig8.bounds[1], -2*Math.PI/3);
@@ -176,14 +186,14 @@ function substitutionDoubleHalfhex(tile){
       var newBig9 = tile.myclone();
       newBig9.id.push('b9');
       newBig9.small2big();
-      newBig9.scale(newBig9.bounds[0], newBig9.bounds[1], 1/4);
+      newBig9.scale(newBig9.bounds[0], newBig9.bounds[1], 1/phi);
       newtiles.push(newBig9);
 
       // new big halfhex (right one)
       var newBig10 = tile.myclone();
       newBig10.id.push('b10');
       newBig10.small2big();
-      newBig10.scale(newBig10.bounds[0], newBig10.bounds[1], 1/4);
+      newBig10.scale(newBig10.bounds[0], newBig10.bounds[1], 1/phi);
       b60 = newBig10.bounds[6] - newBig10.bounds[0];
       b71 = newBig10.bounds[7] - newBig10.bounds[1];
       newBig10.rotate(newBig10.bounds[0], newBig10.bounds[1], Math.PI/3);
@@ -248,7 +258,7 @@ function substitutionDoubleHalfhex(tile){
       newBig15.rotate(newBig15.bounds[0], newBig15.bounds[1], Math.PI);
       newBig15.shift(s20 + s42/2 + b60/2, s31 + s53/2 + b71/2);
       newtiles.push(newBig15);
-      
+      */
       // done
       return newtiles;
       break;
@@ -272,7 +282,7 @@ function substitutionDoubleHalfhex(tile){
       var newSmall0 = tile.myclone();
       newSmall0.big2small();
       newSmall0.id.push('s0');
-      newSmall0.scale(newSmall0.bounds[0], newSmall0.bounds[1], 1/2);
+      newSmall0.scale(newSmall0.bounds[0], newSmall0.bounds[1], 1/phi);
       newSmall0.rotate(newSmall0.bounds[6], newSmall0.bounds[7], -2*Math.PI/3);
       newSmall0.shift(b06/2, b17/2);
       newtiles.push(newSmall0);
@@ -281,7 +291,7 @@ function substitutionDoubleHalfhex(tile){
       var newSmall1 = tile.myclone();
       newSmall1.big2small();
       newSmall1.id.push('s1');
-      newSmall1.scale(newSmall1.bounds[0], newSmall1.bounds[1], 1/2);
+      newSmall1.scale(newSmall1.bounds[0], newSmall1.bounds[1], 1/phi);
       newSmall1.rotate(newSmall1.bounds[0], newSmall1.bounds[1], Math.PI);
       newSmall1.shift(b20 + b42, b31 + b53);
       newtiles.push(newSmall1);
@@ -290,7 +300,7 @@ function substitutionDoubleHalfhex(tile){
       var newSmall2 = tile.myclone();
       newSmall2.big2small();
       newSmall2.id.push('s2');
-      newSmall2.scale(newSmall2.bounds[6], newSmall2.bounds[7], 1/2);
+      newSmall2.scale(newSmall2.bounds[6], newSmall2.bounds[7], 1/phi);
       newSmall2.rotate(newSmall2.bounds[0], newSmall2.bounds[1], 2*Math.PI/3);
       newSmall2.shift(-b06/2, -b17/2);
       newtiles.push(newSmall2);
@@ -299,7 +309,7 @@ function substitutionDoubleHalfhex(tile){
       var newSmall3 = tile.myclone();
       newSmall3.big2small();
       newSmall3.id.push('s3');
-      newSmall3.scale(newSmall3.bounds[0], newSmall3.bounds[1], 1/2);
+      newSmall3.scale(newSmall3.bounds[0], newSmall3.bounds[1], 1/phi);
       var bc42 = newSmall3.bounds[4] - newSmall3.bounds[2];
       var bc53 = newSmall3.bounds[5] - newSmall3.bounds[3];
       newSmall3.shift(bc42, bc53);
@@ -340,9 +350,13 @@ decorateDoubleHalfhex.set('big',1);
 // 
 Tiling.doubleHalfhexVarbysubst = function({iterations}={}){
   var tiles = [];
-  var mySmall0 = small.myclone();
+  var mySmall0 = big.myclone();
   mySmall0.id.push(0);
   tiles.push(mySmall0);
+  var mySmall1 = small.myclone();
+  mySmall1.rotate(mySmall1.bounds[0], mySmall1.bounds[1], Math.PI);
+  mySmall1.shift(mySmall1.bounds[0] - mySmall1.bounds[6], 0);
+  //tiles.push(mySmall1);
 
   // call the substitution
   tiles = substitute(
