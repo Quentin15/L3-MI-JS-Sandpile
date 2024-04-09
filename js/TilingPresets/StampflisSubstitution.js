@@ -441,7 +441,7 @@ function substitutionSt(tile){
       break;
 	  
 	  
-	case 'los': // Parfait
+	case 'los':
 	    //
       // -------------------------------
       // los substitution -> 2 car, 12 equi, 3 los
@@ -630,7 +630,6 @@ function substitutionSt(tile){
 	  newlos1.equi2los();
 	  newlos1.id.push('los1');
 	  newlos1.scale(tile.bounds[0],tile.bounds[1],1/(2+2*Math.sin(Math.PI/3)));
-	  //newlos1.rotate(tile.bounds[0],tile.bounds[1],Math.PI/12);
 	  newlos1.rotate(tile.bounds[0],tile.bounds[1],-3*Math.PI/12);
       newtiles.push(newlos1);
       
@@ -639,7 +638,6 @@ function substitutionSt(tile){
 	  newlos2.equi2los();
 	  newlos2.id.push('los2');
 	  newlos2.scale(tile.bounds[0],tile.bounds[1],1/(2+2*Math.sin(Math.PI/3)));
-	  //newlos2.rotate(tile.bounds[0],tile.bounds[1],-1*Math.PI/12);
 	  newlos2.rotate(tile.bounds[0],tile.bounds[1],-5*Math.PI/12);
       newtiles.push(newlos2);
       
@@ -784,10 +782,118 @@ function substitutionSt(tile){
 //
 
 var duplicatedSt = [];
+
+//
+// Débordements du Carré
+//
+
+duplicatedSt.push(new DupInfo('car','equi','equi1',3,'equi','equi2'));
+duplicatedSt.push(new DupInfo('car','equi','equi1',3,'equi','equi7'));
+duplicatedSt.push(new DupInfo('car','equi','equi1',3,'equi','equi9'));
+
+duplicatedSt.push(new DupInfo('car','equi','equi4',0,'equi','equi1'));
+duplicatedSt.push(new DupInfo('car','equi','equi4',0,'equi','equi8'));
+duplicatedSt.push(new DupInfo('car','equi','equi4',0,'equi','equi10'));
+
+duplicatedSt.push(new DupInfo('car','equi','equi9',1,'equi','equi1'));
+duplicatedSt.push(new DupInfo('car','equi','equi9',1,'equi','equi8'));
+duplicatedSt.push(new DupInfo('car','equi','equi9',1,'equi','equi10'));
+
+duplicatedSt.push(new DupInfo('car','equi','equi12',0,'equi','equi2'));
+duplicatedSt.push(new DupInfo('car','equi','equi12',0,'equi','equi7'));
+duplicatedSt.push(new DupInfo('car','equi','equi12',0,'equi','equi9'));
+
+duplicatedSt.push(new DupInfo('car','equi','equi13',2,'equi','equi2'));
+duplicatedSt.push(new DupInfo('car','equi','equi13',2,'equi','equi7'));
+duplicatedSt.push(new DupInfo('car','equi','equi13',2,'equi','equi9'));
+
+duplicatedSt.push(new DupInfo('car','equi','equi16',3,'equi','equi1'));
+duplicatedSt.push(new DupInfo('car','equi','equi16',3,'equi','equi8'));
+duplicatedSt.push(new DupInfo('car','equi','equi16',3,'equi','equi10'));
+
+duplicatedSt.push(new DupInfo('car','equi','equi17',2,'equi','equi1'));
+duplicatedSt.push(new DupInfo('car','equi','equi17',2,'equi','equi8'));
+duplicatedSt.push(new DupInfo('car','equi','equi17',2,'equi','equi10'));
+
+duplicatedSt.push(new DupInfo('car','equi','equi20',1,'equi','equi2'));
+duplicatedSt.push(new DupInfo('car','equi','equi20',1,'equi','equi7'));
+duplicatedSt.push(new DupInfo('car','equi','equi20',1,'equi','equi9'));
+
+//
+// Débordements du Triangle
+//
+
+////duplicatedSt.push(new DupInfo('equi','equi','equi1',2,'equi','equi2'));
+////duplicatedSt.push(new DupInfo('equi','equi','equi1',2,'equi','equi7'));
+////duplicatedSt.push(new DupInfo('equi','equi','equi1',2,'equi','equi9'));
+duplicatedSt.push(new DupInfo('equi','equi','equi1',2,'los','equi2'));
+duplicatedSt.push(new DupInfo('equi','equi','equi1',2,'los','equi3'));
+duplicatedSt.push(new DupInfo('equi','equi','equi1',2,'los','equi10'));
+duplicatedSt.push(new DupInfo('equi','equi','equi1',2,'los','equi11'));
+
+duplicatedSt.push(new DupInfo('equi','equi','equi2',0,'equi','equi8'));
+duplicatedSt.push(new DupInfo('equi','equi','equi2',0,'equi','equi10'));
+duplicatedSt.push(new DupInfo('equi','equi','equi2',0,'los','equi1'));
+duplicatedSt.push(new DupInfo('equi','equi','equi2',0,'los','equi4'));
+duplicatedSt.push(new DupInfo('equi','equi','equi2',0,'los','equi9'));
+duplicatedSt.push(new DupInfo('equi','equi','equi2',0,'los','equi12'));
+
+duplicatedSt.push(new DupInfo('equi','equi','equi7',2,'equi','equi8'));
+duplicatedSt.push(new DupInfo('equi','equi','equi7',2,'equi','equi10'));
+duplicatedSt.push(new DupInfo('equi','equi','equi7',2,'los','equi1'));
+duplicatedSt.push(new DupInfo('equi','equi','equi7',2,'los','equi4'));
+duplicatedSt.push(new DupInfo('equi','equi','equi7',2,'los','equi9'));
+duplicatedSt.push(new DupInfo('equi','equi','equi7',2,'los','equi12'));
+
+////duplicatedSt.push(new DupInfo('equi','equi','equi8',1,'equi','equi9'));
+duplicatedSt.push(new DupInfo('equi','equi','equi8',1,'los','equi2'));
+duplicatedSt.push(new DupInfo('equi','equi','equi8',1,'los','equi3'));
+duplicatedSt.push(new DupInfo('equi','equi','equi8',1,'los','equi10'));
+duplicatedSt.push(new DupInfo('equi','equi','equi8',1,'los','equi11'));
+
+duplicatedSt.push(new DupInfo('equi','equi','equi9',1,'equi','equi10'));
+duplicatedSt.push(new DupInfo('equi','equi','equi9',1,'los','equi1'));
+duplicatedSt.push(new DupInfo('equi','equi','equi9',1,'los','equi4'));
+duplicatedSt.push(new DupInfo('equi','equi','equi9',1,'los','equi9'));
+duplicatedSt.push(new DupInfo('equi','equi','equi9',1,'los','equi12'));
+
+duplicatedSt.push(new DupInfo('equi','equi','equi10',0,'los','equi2'));
+duplicatedSt.push(new DupInfo('equi','equi','equi10',0,'los','equi3'));
+duplicatedSt.push(new DupInfo('equi','equi','equi10',0,'los','equi10'));
+duplicatedSt.push(new DupInfo('equi','equi','equi10',0,'los','equi11'));
+
+//
+// Débordements du Losange
+//
+
+duplicatedSt.push(new DupInfo('los','equi','equi1',3,'los','equi2'));
+duplicatedSt.push(new DupInfo('los','equi','equi1',3,'los','equi3'));
+duplicatedSt.push(new DupInfo('los','equi','equi1',3,'los','equi10'));
+duplicatedSt.push(new DupInfo('los','equi','equi1',3,'los','equi11'));
+
+//duplicatedSt.push(new DupInfo('los','equi','equi2',0,'los','equi4'));
+//duplicatedSt.push(new DupInfo('los','equi','equi2',0,'los','equi9'));
+//duplicatedSt.push(new DupInfo('los','equi','equi2',0,'los','equi12'));
+
+duplicatedSt.push(new DupInfo('los','equi','equi3',3,'los','equi4'));
+duplicatedSt.push(new DupInfo('los','equi','equi3',3,'los','equi9'));
+duplicatedSt.push(new DupInfo('los','equi','equi3',3,'los','equi12'));
+
+//duplicatedSt.push(new DupInfo('los','equi','equi4',0,'los','equi10'));
+//duplicatedSt.push(new DupInfo('los','equi','equi4',0,'los','equi11'));
+
+//duplicatedSt.push(new DupInfo('los','equi','equi9',2,'los','equi10'));
+//duplicatedSt.push(new DupInfo('los','equi','equi9',2,'los','equi11'));
+
+duplicatedSt.push(new DupInfo('los','equi','equi10',1,'los','equi12'));
+duplicatedSt.push(new DupInfo('los','equi','equi12',1,'los','equi10'));
+
+//duplicatedSt.push(new DupInfo('los','equi','equi11',2,'los','equi12'));
+
 var duplicatedStoriented = [];
 
 //
-// [4] fill neighbors informations in Eq newtiles (by side effect)
+// [4] fill neighbors informations in St newtiles (by side effect)
 //
 
 //
@@ -813,18 +919,15 @@ decorateSt.set('los',2);
 // 
 Tiling.stampflisSubstitution = function({iterations}={}){
 	var tiles = [];
-	//for(var i=0; i<5; i++){
-      // construct tiles
-      var mycar = car.myclone();
-      mycar.id.push(0);
-      //mycar.rotate(car.bounds[0],car.bounds[1],2*Math.PI/12);
-      tiles.push(mycar);
-    //}
+    // construct tiles
+    var mycar = car.myclone();
+    mycar.id.push(0);
+    tiles.push(mycar);
     // call the substitution
     tiles = substitute(
       iterations,
       tiles,
-      phi,
+      2+2*Math.sin(Math.PI/3),
       substitutionSt,
       duplicatedSt,
       duplicatedStoriented,
