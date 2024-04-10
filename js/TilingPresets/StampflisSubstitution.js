@@ -48,6 +48,7 @@ Tile.prototype.car2equi = function(){
 	this.bounds[4] = c4;
 	this.bounds[5] = c5;
 	this.bounds.splice(6,7);
+	this.limit = 3;
 }
 
 // convert car to los
@@ -82,6 +83,7 @@ Tile.prototype.equi2los = function(){
 	this.bounds[5] = c5;
 	this.bounds[6] = c6;
 	this.bounds[7] = c7;
+	this.limit = 4;
 }
 
 // convert los to car
@@ -113,6 +115,7 @@ Tile.prototype.los2equi = function(){
 	this.bounds[4] = c4;
 	this.bounds[5] = c5;
 	this.bounds.splice(6,7);
+	this.limit = 3;
 }
   
 
