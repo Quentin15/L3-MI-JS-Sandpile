@@ -46,3 +46,26 @@ function distancePointSegment(x,y,xA,yA,xB,yB){
   return res;
 }
 
+
+function segmentOnAnother(xA1, yA1, xB1, yB1, xA2, yA2, xB2, yB2){
+  let deltaX1 = xB1 - xA1;
+  let deltaX2 = xB2 - xA2;
+  if (deltaX1 == 0 && deltaX2 == 0){
+    if ((yA1 <= yA2 && yB2 <= yB1) || (yA1 < yA2 && yA2 < yB1 && yB1 < yB2)){
+      return true;
+    }
+  }
+  else if (deltaX1 != 0 && deltaX2 != 0){
+    let coeff1 = (yB1 - yA1) / deltaX1;
+    let coeff2 = (yB2 - yA2) / deltaX2;
+
+    if (Math.abs(coeff1 - coeff2) < p_error){
+      if (Math.abs((yB2 - yB1) / (xB2 - xB1)) < p_error){
+        return true;
+      }
+    }
+  }
+  
+  return false;
+}
+

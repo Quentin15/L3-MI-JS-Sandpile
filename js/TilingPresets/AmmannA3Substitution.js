@@ -221,7 +221,7 @@ Tile.prototype.six2eight = function(){
     //point 8
     this.bounds.push(x0, this.bounds[13]);
   }
-
+  console.log(this);
   switch(this.id[0]){
     case 'six0':
       this.id[0]='eight0';
@@ -243,6 +243,7 @@ Tile.prototype.six2eight = function(){
       this.six90And270();
       break;
   }
+  this.limit = 8;
 }
 
 // convert an eight to a six
@@ -312,6 +313,7 @@ Tile.prototype.eight2six = function(){
   }
   // removes points 7 and 8
   this.bounds.splice(-4);
+  this.limit = 6;
 }
 
 // convert an eight to a ten
@@ -401,6 +403,8 @@ Tile.prototype.eight2ten = function(){
       this.eight90And270();
       break;
   }
+
+  this.limit = 10;
 }
 
 // convert a ten to a six
@@ -726,17 +730,29 @@ Tiling.A3bysubst = function({iterations}={}){
   var mySix90 = six90.myclone();
   var mySix180 = six180.myclone();
   var mySix270 = six270.myclone();
-  //tiles.push(mySix0, mySix90, mySix180, mySix270);
+  tiles.push(mySix0/*, mySix90, mySix180, mySix270*/);
   var myEight0 = eight0.myclone();
   var myEight90 = eight90.myclone();
   var myEight180 = eight180.myclone();
   var myEight270 = eight270.myclone();
-  tiles.push(myEight0, myEight90, myEight180, myEight270);
+  //tiles.push(myEight0, myEight90, myEight180, myEight270);
   var myTen0 = ten0.myclone();
   var myTen90 = ten90.myclone();
   var myTen180 = ten180.myclone();
   var myTen270 = ten270.myclone();
-  //tiles.push(/*myTen0, */myTen90/*, myTen180, myTen270*/);
+  //tiles.push(myTen0, myTen90, myTen180, myTen270);
+  /*var bounds = [];
+  bounds.push(0,0,1,0,1,1,0,1);
+  eight270 = new Tile(['eight0'],[],bounds,4);
+  var bounds = [];
+  bounds.push(0,0,-1,0,-1,1,0,1);
+  eight0 = new Tile(['eight90'],[],bounds,4);
+  eight0.shift(0,-0.5);
+  var bounds = [];
+  bounds.push(0,0,-1,0,-1,1,1,1,1,0.5,0,0.5);
+  eight90 = new Tile(['eight180'],[],bounds,6);
+  eight90.shift(0,0.5);
+  tiles.push(eight270, eight0, eight90);*/
 
   // call the substitution
   tiles = substitute(

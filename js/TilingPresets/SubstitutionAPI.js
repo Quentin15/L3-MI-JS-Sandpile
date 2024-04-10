@@ -468,14 +468,18 @@ function findNeighbors(tiles,tilesdict,n2b){
   var fn = 0;
   for(let i=0; i<segments.length-1; i++){
     // check if points are identical (up to p_error)
-    if(  distance(segments[i][0],segments[i][1],segments[i+1][0],segments[i+1][1])<p_error
-      && distance(segments[i][2],segments[i][3],segments[i+1][2],segments[i+1][3])<p_error){
+    if(  /*distance(segments[i][0],segments[i][1],segments[i+1][0],segments[i+1][1])<p_error
+  && distance(segments[i][2],segments[i][3],segments[i+1][2],segments[i+1][3])<p_error*/
+segmentOnAnother(segments[i][0], segments[i][1], segments[i][2], segments[i][3], 
+  segments[i+1][0], segments[i+1][1], segments[i+1][2], segments[i+1][3])){
       // found two identical segments => set neighbors
       fn++;
       let ts1=segmentsMap.get(segment2key(segments[i]));
       let ts2=segmentsMap.get(segment2key(segments[i+1]));
-      tilesdict.get(id2key(ts1.id)).neighbors[ts1.nindex] = ts2.id;
-      tilesdict.get(id2key(ts2.id)).neighbors[ts2.nindex] = ts1.id;
+      //if(!tilesdict.get(id2key(ts1.id)).neighbors.includes(ts2.id)){
+        tilesdict.get(id2key(ts1.id)).neighbors[ts1.nindex] = ts2.id;
+        tilesdict.get(id2key(ts2.id)).neighbors[ts2.nindex] = ts1.id;
+      //}
       // i+1 already set
       i++;
     }
