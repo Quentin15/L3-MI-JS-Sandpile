@@ -1,9 +1,6 @@
-// This code is part of JS-Sandpile (https://github.com/huacayacauh/JS-Sandpile/)
-// CC-BY Valentin Darrigo, Jeremy Fersula, Kevin Perrot
-
-// Penrose P2 (kite-dart)
+// Stampfli's 12-fold 1
 // substitution described at
-// http://tilings.math.uni-bielefeld.de/substitution/penrose-kite-dart/
+// https://tilings.math.uni-bielefeld.de/substitution/stampflis-12-fold-1/
 
 //
 // [0] toolbox
