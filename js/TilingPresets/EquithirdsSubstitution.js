@@ -180,7 +180,7 @@ Tiling.equithirdsSubstitution = function({iterations}={}){
     tiles = substitute(
       iterations,
       tiles,
-      phi*2*Math.cos(Math.PI/3),
+      2*Math.cos(Math.PI/6),
       substitutionEq,
       duplicatedEq,
       duplicatedEqoriented,
