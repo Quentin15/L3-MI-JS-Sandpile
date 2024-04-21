@@ -1,73 +1,29 @@
-// This code is part of JS-Sandpile (https://github.com/huacayacauh/JS-Sandpile/)
-// CC-BY Valentin Darrigo, Jeremy Fersula, Kevin Perrot
+Tiling.voronoiDiagram = function({size}={}){
+	
+	var tils = [];
+	var points = [];
+	min = Math.ceil(-size/2);	// Taille cadre (haut et droit)
+    max = Math.floor(size/2);	// Taille cadre (bas et gauche)
+	
+	for (let i = 0; i < 10; i++){
+		points.push([Math.floor(Math.random() * (max - min + 1)) + min, Math.floor(Math.random() * (max - min + 1)) + min]);
+	}
+	console.log(points);
+	
+	points.forEach((element) => tils.push(sqTile(element[0], element[1])));
+    console.log(tils);
 
-// Penrose P2 (kite-dart)
-// substitution described at
-// http://tilings.math.uni-bielefeld.de/substitution/penrose-kite-dart/
+    return new Tiling(tils);
+}
 
-//
-// [0] toolbox
-//
-
-// golden ratio
-var phi = (1+Math.sqrt(5))/2;
-
-//
-// [1] define tile types P2
-//
-
-
-
-//
-// [2] define substitution P2
-//
-
-
-
-//
-// [3] defined duplicated tile informations P2
-//
-
-var duplicatedEq = [];
-var duplicatedEqoriented = [];
-
-//
-// [4] fill neighbors informations in Eq newtiles (by side effect)
-//
-
-//
-// [6] use default neighbors2bounds
-// 
-var neighbors2boundsEq = new Map();
-
-//
-// [7] construct base tilings and call substitute
-//
-
-// prepare decoration
-decorateEq = new Map();
-
-//
-// [7.1] construct "Equithirds" tiling by substitution
-// 
-Tiling.voronoiDiagram = function({iterations}={}){
-	var tiles = [];
-    var myequi = equi.myclone();
-    myequi.id.push(0);
-    tiles.push(myequi);
-
-    // call the substitution
-    tiles = substitute(
-      iterations,
-      tiles,
-      2*Math.cos(Math.PI/6),
-      substitutionEq,
-      duplicatedEq,
-      duplicatedEqoriented,
-      "I am lazy",
-      neighbors2boundsEq,
-      decorateEq
-    );
-    // construct tiling
-    return new Tiling(tiles);
+function sqTile(x, y){
+	var id = [x, y];
+	
+	var bounds = [];
+	bounds.push(x, y); // Gauche bas
+	bounds.push(x+0.2, y); // Droite bas
+	bounds.push(x+0.2, y+0.2); // Droit haut
+	bounds.push(x, y+0.2); // Gauche haut
+	
+	return new Tile(id, [], bounds, 4);
 }
