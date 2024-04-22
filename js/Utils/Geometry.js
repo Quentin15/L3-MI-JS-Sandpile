@@ -46,26 +46,47 @@ function distancePointSegment(x,y,xA,yA,xB,yB){
   return res;
 }
 
+function segmentSlope(segment){
+  let deltaX1 = segment[2] - segment[0];
+  let deltaY1 = segment[3] - segment[1];
 
-function segmentOnAnother(xA1, yA1, xB1, yB1, xA2, yA2, xB2, yB2){
-  let deltaX1 = xB1 - xA1;
-  let deltaX2 = xB2 - xA2;
-  if (deltaX1 == 0 && deltaX2 == 0){
-    if ((yA1 <= yA2 && yB2 <= yB1) || (yA1 < yA2 && yA2 < yB1 && yB1 < yB2)){
-      return true;
-    }
-  }
-  else if (deltaX1 != 0 && deltaX2 != 0){
-    let coeff1 = (yB1 - yA1) / deltaX1;
-    let coeff2 = (yB2 - yA2) / deltaX2;
+  if (Math.abs(deltaX1) < p_error)
+    return Number.POSITIVE_INFINITY;
+  else if (Math.abs(deltaY1) < p_error)
+    return 0;
+  else
+    return deltaY1 / deltaX1;
+}
 
-    if (Math.abs(coeff1 - coeff2) < p_error){
-      if (Math.abs((yB2 - yB1) / (xB2 - xB1)) < p_error){
-        return true;
-      }
-    }
-  }
+
+// If two segments [AB] and [CD] share just one extremity or nothing => not neighbors
+function badCondition(xA, yA, xB, yB, xC, yC, xD, yD){
+  let distBToCD = distancePointSegment(xB, yB, xC, yC, xD, yD);
+  let distDToCD = distancePointSegment(xD, yD, xA, yA, xB, yB);
+  let distAToCD = distancePointSegment(xA, yA, xC, yC, xD, yD);
+  let distCToAB = distancePointSegment(xC, yC, xA, yA, xB, yB);
+  let distDToAB = distancePointSegment(xD, yD, xA, yA, xB, yB);
+  let shareOnExtremity =  distBToCD < p_error && 
+    distance(xB, yB, xC, yC) < p_error &&  
+    distDToCD >= p_error && 
+    distAToCD >= p_error;
+
+  let shareNothing = distAToCD >= p_error &&
+    distBToCD >= p_error &&
+    distCToAB >= p_error &&
+    distDToAB >= p_error;
+
+  return shareOnExtremity || shareNothing;
   
-  return false;
+}
+
+// Except sharing just on point (an extremity)
+function segmentOnAnother(xA1, yA1, xB1, yB1, xA2, yA2, xB2, yB2, coeff){
+
+  // same segments
+  if(distance(xA1, yA1, xA2, yA2)<p_error && distance(xB1, yB1,xB2, yB2)<p_error)
+    return true;
+
+  return !badCondition(xA1, yA1, xB1, yB1, xA2, yA2, xB2, yB2) && !badCondition(xA2, yA2, xB2, yB2, xA1, yA1, xB1, yB1);
 }
 
