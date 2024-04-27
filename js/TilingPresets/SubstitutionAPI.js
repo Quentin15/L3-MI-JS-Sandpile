@@ -493,6 +493,8 @@ function default_neighbors2bounds(n){
 
 // typeOfSand : 1 -> one sand to each neighbor
 //              2 -> one sand for each shared bound
+// /!\ for 2 : if one bound is shared with more than two neighbors, one of them is randomly
+//             chosen to receive the sand
 function findNeighborsModified(tiles, tilesdict, n2b, typeOfSand){
   var segmentsMap = new Map();
   var segments = buildSegments(segmentsMap, tiles, n2b);
@@ -562,17 +564,17 @@ function findNeighborsModified(tiles, tilesdict, n2b, typeOfSand){
           if(!tilesdict.get(id2key(ts1.id)).neighbors.includes(ts2.id) || typeOfSand == 2){
             let neighb1 = tilesdict.get(id2key(ts1.id)).neighbors;
             let neighb2 = tilesdict.get(id2key(ts2.id)).neighbors;
-            if(typeof neighb1 == 'undefined'){
+            if(neighb1[ts1.nindex] == undefined)
               neighb1[ts1.nindex] = ts2.id;
-            }
             else{
               neighb1.push(ts2.id);
+              tilesdict.get(id2key(ts1.id)).limit++;
             }
-            if(typeof neighb2 == 'undefined'){
+            if(neighb2[ts2.nindex] == undefined)
               neighb2[ts2.nindex] = ts1.id;
-            }
             else{
               neighb2.push(ts1.id);
+              tilesdict.get(id2key(ts2.id)).limit++;
             }
             fn++;
           }
@@ -581,10 +583,27 @@ function findNeighborsModified(tiles, tilesdict, n2b, typeOfSand){
     }
   }
   // if function neighbor is 1
-  /*for (let tile of tilesdict.values()){
-    let n = [...new Set(tile.neighbors)];
-    let nb = n.length;
-    tile.limit = nb;
+  // tile becomes "instable" for the number of neighbors it has
+  /*if (typeOfSand == 1){
+    for (let tile of tilesdict.values()){
+      let n = [...new Set(tile.neighbors)];
+      let u = n.indexOf(undefined);
+      if (u != -1)
+        n.splice(u, 1);
+      let nb = n.length;
+      tile.limit = nb;
+    }
+  }*/
+  /*if (typeOfSand == 2){
+    for (let tile of tilesdict.values()){
+      console.log(tile.neighbors);
+      let n = tile.neighbors;
+      n = n.filter(function(x) {
+          return x !== undefined;
+      });
+      let nb = n.length;
+      tile.limit = nb;
+    }
   }*/
   // done
   return fn; // side effect
@@ -666,7 +685,7 @@ function substitute(iterations,tiles,ratio,mysubstitution,mydupinfos,mydupinfoso
     resetAllNeighbors(tiles);
     let tilesdict = new Map(tiles.map(i => [id2key(i.id), i]));
     let fn = 0;
-    if (findNeighbors_option == 0)
+    if (findNeighbors_type == 0)
       fn = findNeighbors(tiles, tilesdict, findNeighbors_option);
     else if (findNeighbors_type == 1 || findNeighbors_type == 2)
       fn = findNeighborsModified(tiles,tilesdict,findNeighbors_option,findNeighbors_type);
@@ -704,7 +723,7 @@ function substitute(iterations,tiles,ratio,mysubstitution,mydupinfos,mydupinfoso
     if(findNeighbors_option != false){
       console.log("* compute neighbors (global)");
       let fn = 0;
-      if (findNeighbors_option == 0)
+      if (findNeighbors_type == 0)
         fn = findNeighbors(newtiles, newtilesdict, findNeighbors_option);
       else if (findNeighbors_type == 1 || findNeighbors_type == 2)
         fn = findNeighborsModified(newtiles, newtilesdict,findNeighbors_option,findNeighbors_type);
