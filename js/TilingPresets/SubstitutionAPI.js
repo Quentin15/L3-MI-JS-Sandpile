@@ -491,8 +491,8 @@ function default_neighbors2bounds(n){
     return fn; // side effect
   }
 
-// typeOfSand : false -> one sand to each neighbor
-//              true -> one sand for each shared bound
+// typeOfSand : 1 -> one sand to each neighbor
+//              2 -> one sand for each shared bound
 function findNeighborsModified(tiles, tilesdict, n2b, typeOfSand){
   var segmentsMap = new Map();
   var segments = buildSegments(segmentsMap, tiles, n2b);
@@ -559,7 +559,7 @@ function findNeighborsModified(tiles, tilesdict, n2b, typeOfSand){
         for (let j = 1 ; j < slopesMap.get(key)[i].length ; j++){
           let ts1 = segmentsMap.get(segment2key(slopesMap.get(key)[i][0]));
           let ts2 = segmentsMap.get(segment2key(slopesMap.get(key)[i][j]));
-          if(!tilesdict.get(id2key(ts1.id)).neighbors.includes(ts2.id)){
+          if(!tilesdict.get(id2key(ts1.id)).neighbors.includes(ts2.id) || typeOfSand == 2){
             let neighb1 = tilesdict.get(id2key(ts1.id)).neighbors;
             let neighb2 = tilesdict.get(id2key(ts2.id)).neighbors;
             if(typeof neighb1 == 'undefined'){
@@ -580,6 +580,12 @@ function findNeighborsModified(tiles, tilesdict, n2b, typeOfSand){
       }
     }
   }
+  // if function neighbor is 1
+  /*for (let tile of tilesdict.values()){
+    let n = [...new Set(tile.neighbors)];
+    let nb = n.length;
+    tile.limit = nb;
+  }*/
   // done
   return fn; // side effect
 }
@@ -640,7 +646,7 @@ function resetAllNeighbors(tiles){
 //
 // }
 // 
-function substitute(iterations,tiles,ratio,mysubstitution,mydupinfos,mydupinfosoriented,myneighbors,findNeighbors_option=false,findNeighbors_type=null,mydecoration_option=false){
+function substitute(iterations,tiles,ratio,mysubstitution,mydupinfos,mydupinfosoriented,myneighbors,findNeighbors_option=false,mydecoration_option=false,findNeighbors_type=0){
   // lazy? discover base neighbors
   if(typeof(myneighbors)=="string"){
     // check that findNeighbors_option is set
@@ -649,16 +655,21 @@ function substitute(iterations,tiles,ratio,mysubstitution,mydupinfos,mydupinfoso
       return tiles;
     }
     // check that findNeighbors_type is set
-    if(typeof(findNeighbors_type) != "boolean"){
-      console.log("error : please provide a boolean value for the sand spreading.");
+    if(findNeighbors_type != 0 && findNeighbors_type != 1 && findNeighbors_type != 2){
+      console.log("error : please provide an integer value for the sand spreading "
+      + "\n(0 -> neighbors for same bounds, \n1 -> one sand for each share bound, \n2 -> one sand for each neighbor).");
       return tiles;
     }
-    let lazyInfo = findNeighbors_type ? "(one sand for each shared bound)" : "(one sand for each neighbor)";
+    let lazyInfo = findNeighbors_type == 0 ? "(neighbors for same bounds)" : findNeighbors_type == 1 ? "(one sand for each neighbor)" : "(one sand for each shared bound)";
     console.log("lazy: compute base neighbors " + lazyInfo);
     // reset then find neighbors
     resetAllNeighbors(tiles);
     let tilesdict = new Map(tiles.map(i => [id2key(i.id), i]));
-    let fn=findNeighborsModified(tiles,tilesdict,findNeighbors_option,findNeighbors_type);
+    let fn = 0;
+    if (findNeighbors_option == 0)
+      fn = findNeighbors(tiles, tilesdict, findNeighbors_option);
+    else if (findNeighbors_type == 1 || findNeighbors_type == 2)
+      fn = findNeighborsModified(tiles,tilesdict,findNeighbors_option,findNeighbors_type);
     console.log("  found "+fn);
   }
   // scale the base tiling all at once
@@ -692,7 +703,11 @@ function substitute(iterations,tiles,ratio,mysubstitution,mydupinfos,mydupinfoso
     // find neighbors from non-adjacent tiles
     if(findNeighbors_option != false){
       console.log("* compute neighbors (global)");
-      let fn=findNeighbors(newtiles,newtilesdict,findNeighbors_option);
+      let fn = 0;
+      if (findNeighbors_option == 0)
+        fn = findNeighbors(newtiles, newtilesdict, findNeighbors_option);
+      else if (findNeighbors_type == 1 || findNeighbors_type == 2)
+        fn = findNeighborsModified(newtiles, newtilesdict,findNeighbors_option,findNeighbors_type);
       console.log("  found "+fn);
     }
     // update tiles

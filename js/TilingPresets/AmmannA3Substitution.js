@@ -756,8 +756,8 @@ Tiling.A3bysubst = function({iterations}={}){
     [], // no duplicated tiles
     "I am lazy", // myneighbors
     neighbors2boundsA3,
-    true, // allowing one sand for each bound?
-    decorateA3
+    decorateA3,
+    0 // function of neighbors
   );
   // construct tiling
   return new Tiling(tiles);
