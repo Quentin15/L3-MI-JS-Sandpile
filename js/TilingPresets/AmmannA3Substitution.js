@@ -693,9 +693,9 @@ function substitutionA3(tile){
 // [6] use default neighbors2bounds
 //
 var neighbors2boundsA3 = new Map();
-neighbors2boundsA3.set('six0',default_neighbors2bounds(4));
-neighbors2boundsA3.set('six90',default_neighbors2bounds(4));
-neighbors2boundsA3.set('six180',default_neighbors2bounds(4));
+neighbors2boundsA3.set('six0',default_neighbors2bounds(6));
+neighbors2boundsA3.set('six90',default_neighbors2bounds(6));
+neighbors2boundsA3.set('six180',default_neighbors2bounds(6));
 neighbors2boundsA3.set('six270',default_neighbors2bounds(6));
 neighbors2boundsA3.set('eight0',default_neighbors2bounds(8));
 neighbors2boundsA3.set('eight90',default_neighbors2bounds(8));
@@ -734,7 +734,7 @@ Tiling.A3bysubst = function({iterations}={}){
   var mySix90 = six90.myclone();
   var mySix180 = six180.myclone();
   var mySix270 = six270.myclone();
-  //tiles.push(mySix0/*, mySix90, mySix180, mySix270*/);
+  tiles.push(mySix0/*, mySix90, mySix180, mySix270*/);
   var myEight0 = eight0.myclone();
   var myEight90 = eight90.myclone();
   var myEight180 = eight180.myclone();
@@ -745,7 +745,7 @@ Tiling.A3bysubst = function({iterations}={}){
   var myTen180 = ten180.myclone();
   var myTen270 = ten270.myclone();
   //tiles.push(myTen0, myTen90, myTen180, myTen270);
-  mySix0.bounds = [0,0,1,0,1,1,0,1];
+  /*mySix0.bounds = [0,0,1,0,1,1,0,1];
   mySix0.limit = 4;
   mySix90.bounds = [0,0,1,0,1,1,0,1];
   mySix90.shift(1,-0.5);
@@ -753,7 +753,7 @@ Tiling.A3bysubst = function({iterations}={}){
   mySix180.bounds = [0,0,1,0,1,1,0,1];
   mySix180.limit = 4; 
   mySix180.shift(1,0.5);
-  tiles.push(mySix0, mySix90, mySix180);
+  tiles.push(mySix0, mySix90, mySix180);*/
 
 
   // call the substitution
@@ -767,7 +767,7 @@ Tiling.A3bysubst = function({iterations}={}){
     "I am lazy", // myneighbors
     neighbors2boundsA3,
     decorateA3,
-    1 // function of neighbors
+    2 // function of neighbors
   );
   // construct tiling
   return new Tiling(tiles);

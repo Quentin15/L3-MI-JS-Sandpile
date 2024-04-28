@@ -491,23 +491,22 @@ function default_neighbors2bounds(n){
     return fn; // side effect
   }
 
+// Default : tile sends one sand to each bound, limit = number of bounds
 // typeOfSand : 1 -> one sand to each neighbor
 //              2 -> one sand for each shared bound
-// /!\ for 2 : if one bound is shared with more than two neighbors, one of them is randomly
-//             chosen to receive the sand
 function findNeighborsModified(tiles, tilesdict, n2b, typeOfSand){
   var segmentsMap = new Map();
   var segments = buildSegments(segmentsMap, tiles, n2b);
 
-  // Map of every segments slopes
+  // Map of all segments' slopes
   // {
   //    slope1 => [[sgmt1, sgmt2], [segmt3], ...],
   //    slope2 => [[sgmt4], [sgmt5], ...],
   //    ...
   // }
-  // Each value V contains every segments with the same slope, divied in arrays A (like equivalence classes).
-  // Each A array contains, at least, one segment A[0] and every A[j] (j between 1 to A.length - 1) is a neighbor of
-  // A[0] 
+  // Each value V contains every segments with the same slope, divided in subarrays A (like equivalence classes).
+  // Each A contains, at least, one segment A[0] and A[j] (j between 1 to A.length - 1) is a neighbor of
+  // A[0]. 
 
   var slopesMap = new Map();
   if (segments.length >= 1){
@@ -515,8 +514,8 @@ function findNeighborsModified(tiles, tilesdict, n2b, typeOfSand){
     slopesMap.set(slope, [[segments[0]]]);
   }
 
-  // Search for a similar key to the slope given
-  // Returns key (real number or POSITIVE_INFINITY) or NEGATIVE_INFINITY otherwise
+  // Search for a similar key to the given slope.
+  // Return key (real number or POSITIVE_INFINITY), NEGATIVE_INFINITY otherwise.
   function similarSlope(slope){
     for (let key of slopesMap.keys()){
       if (Math.abs(key - slope) < p_error || 
@@ -527,10 +526,10 @@ function findNeighborsModified(tiles, tilesdict, n2b, typeOfSand){
   }
 
 
-  // For each new segment S, check if its slope already exists.
-  // If so, search for segments which could be neighbors (comparizon with the first segment of each subarray)
-  // and add a new subarray with S at the end
-  // If not, add a new slope key and an array with a subarray containing S
+  // For each new segment E, check if its slope already exists.
+  // If so, search for segments which could be neighbors (comparizon with the first segment of each subarray A, 
+  //    add E in A if so) and add a new subarray with E at the end.
+  // If not, add a new slope key and an array with a subarray containing E.
   for (let i=1; i < segments.length; i++){
     let slope = segmentSlope(segments[i]);
     let similarKey = similarSlope(slope);
@@ -539,7 +538,7 @@ function findNeighborsModified(tiles, tilesdict, n2b, typeOfSand){
         let segmentToTest = segments[i];
         let segmentStored = slopesMap.get(similarKey)[j][0];
         if (segmentOnAnother(segmentToTest[0], segmentToTest[1], segmentToTest[2], segmentToTest[3],
-          segmentStored[0], segmentStored[1], segmentStored[2], segmentStored[3], similarKey))
+          segmentStored[0], segmentStored[1], segmentStored[2], segmentStored[3]))
             slopesMap.get(similarKey)[j].push(segmentToTest);
       }
       slopesMap.get(similarKey).push([segments[i]]);
@@ -554,57 +553,47 @@ function findNeighborsModified(tiles, tilesdict, n2b, typeOfSand){
   // For the moment, as the tile's number of neighbors is given at the beginning, and
   // supposing that this number can change, we add an element to the neighbors array (the capacity
   // is increased) if a bounder of a tile is shared with 2 or more other bounders.
+
+  // 1 : if two tiles share more than one bound B, B is the link between them and
+  // the other bounds are set to -1. 
   var fn = 0;
   for (let key of slopesMap.keys()){
-    for (let i = 0 ; i < slopesMap.get(key).length; i++){
-      if (slopesMap.get(key)[i].length > 1){
-        for (let j = 1 ; j < slopesMap.get(key)[i].length ; j++){
-          let ts1 = segmentsMap.get(segment2key(slopesMap.get(key)[i][0]));
-          let ts2 = segmentsMap.get(segment2key(slopesMap.get(key)[i][j]));
-          if(!tilesdict.get(id2key(ts1.id)).neighbors.includes(ts2.id) || typeOfSand == 2){
-            let neighb1 = tilesdict.get(id2key(ts1.id)).neighbors;
-            let neighb2 = tilesdict.get(id2key(ts2.id)).neighbors;
+    let segmentsOfSlope = slopesMap.get(key);
+    for (let i = 0 ; i < segmentsOfSlope.length; i++){
+      if (segmentsOfSlope[i].length > 1){
+        for (let j = 1 ; j < segmentsOfSlope[i].length ; j++){
+          let ts1 = segmentsMap.get(segment2key(segmentsOfSlope[i][0]));
+          let ts2 = segmentsMap.get(segment2key(segmentsOfSlope[i][j]));
+          let neighb1 = tilesdict.get(id2key(ts1.id)).neighbors;
+          let neighb2 = tilesdict.get(id2key(ts2.id)).neighbors;
+
+          let notAlreadyNeighbor = !tilesdict.get(id2key(ts1.id)).neighbors.includes(ts2.id);
+
+          if(notAlreadyNeighbor || typeOfSand == 2){
             if(neighb1[ts1.nindex] == undefined)
               neighb1[ts1.nindex] = ts2.id;
-            else{
+            else
               neighb1.push(ts2.id);
-              tilesdict.get(id2key(ts1.id)).limit++;
-            }
             if(neighb2[ts2.nindex] == undefined)
               neighb2[ts2.nindex] = ts1.id;
-            else{
+            else
               neighb2.push(ts1.id);
-              tilesdict.get(id2key(ts2.id)).limit++;
-            }
             fn++;
+          }
+          else if (!notAlreadyNeighbor){
+            neighb1[ts1.nindex] = -1;
+            neighb2[ts2.nindex] = -1;
           }
         }
       }
     }
   }
-  // if function neighbor is 1
-  // tile becomes "instable" for the number of neighbors it has
-  /*if (typeOfSand == 1){
-    for (let tile of tilesdict.values()){
-      let n = [...new Set(tile.neighbors)];
-      let u = n.indexOf(undefined);
-      if (u != -1)
-        n.splice(u, 1);
-      let nb = n.length;
-      tile.limit = nb;
-    }
-  }*/
-  /*if (typeOfSand == 2){
-    for (let tile of tilesdict.values()){
-      console.log(tile.neighbors);
-      let n = tile.neighbors;
-      n = n.filter(function(x) {
-          return x !== undefined;
-      });
-      let nb = n.length;
-      tile.limit = nb;
-    }
-  }*/
+
+  // 1 : limit = number of empty bounds (undefined) + number of neighbors (x not in {-1, undefined}).
+  // 2 : limit = number of empty bounds (undefined) + number of connections.
+  for (let tile of tilesdict.values()){
+    tile.limit = typeOfSand == 1 ? tile.neighbors.filter(x => x !== -1).length : tile.neighbors.length;
+  }
   // done
   return fn; // side effect
 }
