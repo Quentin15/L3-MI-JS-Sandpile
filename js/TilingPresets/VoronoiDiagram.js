@@ -1,53 +1,3 @@
-/*Tiling.voronoiDiagram = function({width,height,size}={}){
-	
-	var tils = [];
-	var points = [];
-	
-	// bornes cadre centré
-	minW = Math.ceil(-width/2);	// Taille cadre gauche
-	maxW = Math.floor(width/2);	// Taille cadre droit
-	minH = Math.ceil(-height/2);	// Taille cadre bas
-    maxH = Math.floor(height/2);	// Taille cadre haut
-    
-    // création du cadre
-    var frame = [];
-    frame.push(minW,minH);
-    frame.push(maxW,minH);
-    frame.push(maxW,maxH);
-    frame.push(minW,maxH);
-	
-	tils.push(new Tile([minW,minH], [], frame, 4));
-	
-	// création des points
-	for (let i = 0; i < size; i++){
-		points.push([Math.random() * (maxW - minW) + minW, Math.random() * (maxH - minH) + minH]);
-	}
-	console.log(points);
-	
-	points.forEach((element) => tils.push(sqTile(element[0], element[1])));
-    console.log(tils);
-
-    return new Tiling(tils);
-}*/
-
-// création de la forme des points
-function sqTile(x, y){
-	var id = [x, y];
-	
-	var bounds = [];
-	bounds.push(x-0.1, y-0.1); // Gauche bas
-	bounds.push(x+0.1, y-0.1); // Droite bas
-	bounds.push(x+0.1, y+0.1); // Droit haut
-	bounds.push(x-0.1, y+0.1); // Gauche haut
-	
-	return new Tile(id, [], bounds, 4);
-}
-
-
-
-
-
-
 /*!
 Copyright (C) 2010-2013 Raymond Hill: https://github.com/gorhill/Javascript-Voronoi
 MIT License: See https://github.com/gorhill/Javascript-Voronoi/LICENSE.md
@@ -1676,17 +1626,17 @@ VoronoiDiagram.prototype.recycle = function(diagram) {
 //   *references* to sites are copied locally.
 
 //Voronoi.prototype.compute = function(sites, bbox) {
-Tiling.voronoiDiagram = function({width,height,size}={}){
+VoronoiDiagram.prototype.compute = function(width,height,size){
     // to measure execution time
     var startTime = new Date();
-
+	
     // init internal state
-    //this.reset();
+    this.reset();
     
     // xl, xr means x left, x right
     // yt, yb means y top, y bottom
     var bbox = {xl:-width/2, xr:width/2, yt:height/2, yb:-height/2};	// Cadre dimensions
-    var voronoi = new VoronoiDiagram();
+    //var voronoi = new VoronoiDiagram();
     // pass an object which exhibits xl, xr, yt, yb properties. The bounding
     // box will be used to connect unbound edges, and to close open cells
 
@@ -1795,10 +1745,25 @@ Tiling.voronoiDiagram = function({width,height,size}={}){
     diagram.edges = this.edges;
     diagram.vertices = this.vertices;
     diagram.execTime = stopTime.getTime()-startTime.getTime();
+    
+    /*this.vertices = null;
+    this.edges = null;
+    this.cells = null;
+    this.toRecycle = null;
+    this.beachsectionJunkyard = [];
+    this.circleEventJunkyard = [];
+    this.vertexJunkyard = [];
+    this.edgeJunkyard = [];
+    this.cellJunkyard = [];*/
+    
+    diagram.vertices.forEach((element) => tils.push(sqTile(element.x, element.y)));
+	
+	console.log(diagram.vertices);
+    //console.log(tils);
+    
 
     // clean up
     this.reset();
-	console.log(edges);
     //return diagram;
     return new Tiling(tils);
     };
@@ -1807,4 +1772,24 @@ Tiling.voronoiDiagram = function({width,height,size}={}){
 
 if ( typeof module !== 'undefined' ) {
     module.exports = VoronoiDiagram;
+}
+
+// Création de la forme des points
+function sqTile(x, y){
+	var id = [x, y];
+	
+	var bounds = [];
+	bounds.push(x-0.1, y-0.1); // Gauche bas
+	bounds.push(x+0.1, y-0.1); // Droite bas
+	bounds.push(x+0.1, y+0.1); // Droit haut
+	bounds.push(x-0.1, y+0.1); // Gauche haut
+	
+	return new Tile(id, [], bounds, 4);
+}
+
+// Fonction principale
+Tiling.voronoiDiagram = function({width,height,size}={}){
+	var voronoi = new VoronoiDiagram();
+    result = voronoi.compute(width,height,size);
+    return result;
 }
