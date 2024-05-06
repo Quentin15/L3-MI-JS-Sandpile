@@ -728,13 +728,13 @@ decorateA3.set('ten270',2);
 //
 // [7.1] construct "Ammann A3 by subst" tiling by substitution
 // 
-Tiling.A3bysubst = function({iterations}={}){
+Tiling.A3bysubst = function({iterations, neighborFunc}={}){
   var tiles = [];
   var mySix0 = six0.myclone();
   var mySix90 = six90.myclone();
   var mySix180 = six180.myclone();
   var mySix270 = six270.myclone();
-  tiles.push(mySix0/*, mySix90, mySix180, mySix270*/);
+  //tiles.push(mySix0/*, mySix90, mySix180, mySix270*/);
   var myEight0 = eight0.myclone();
   var myEight90 = eight90.myclone();
   var myEight180 = eight180.myclone();
@@ -753,7 +753,17 @@ Tiling.A3bysubst = function({iterations}={}){
   mySix180.bounds = [0,0,1,0,1,1,0,1];
   mySix180.limit = 4; 
   mySix180.shift(1,0.5);
-  tiles.push(mySix0, mySix90, mySix180);*/
+  mySix270.bounds = [0,0,1,0,1,1,0,1];
+  mySix270.limit = 4; 
+  mySix270.shift(-1,0);
+  myEight0.bounds = [0,0,1,0,1,2,0,2];
+  myEight0.shift(2,-0.5);
+  myEight0.limit = 4;
+  myEight90.bounds = [];
+  myEight90.bounds.push(0,0,2,0,2,1,1,1,1,2,0,2);
+  myEight90.limit = 6;
+  myEight90.shift(-2,-1);
+  tiles.push(mySix0, mySix90, mySix180,/* mySix270, myEight0, myEight90);*/
 
 
   // call the substitution
@@ -767,7 +777,7 @@ Tiling.A3bysubst = function({iterations}={}){
     "I am lazy", // myneighbors
     neighbors2boundsA3,
     decorateA3,
-    2 // function of neighbors
+    neighborFunc // function of neighbors
   );
   // construct tiling
   return new Tiling(tiles);
