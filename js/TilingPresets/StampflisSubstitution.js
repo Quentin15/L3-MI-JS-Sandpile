@@ -1,9 +1,5 @@
 // This code is part of JS-Sandpile (https://github.com/huacayacauh/JS-Sandpile/)
-// CC-BY Valentin Darrigo, Jeremy Fersula, Kevin Perrot
-
-// Penrose P2 (kite-dart)
-// substitution described at
-// http://tilings.math.uni-bielefeld.de/substitution/penrose-kite-dart/
+// CC-BY Coline Besson
 
 //
 // [0] toolbox
@@ -118,7 +114,6 @@ Tile.prototype.los2equi = function(){
 	this.limit = 3;
 }
   
-
 //
 // [2] define substitution P2
 //
@@ -926,6 +921,7 @@ Tiling.stampflisSubstitution = function({iterations}={}){
     var mycar = car.myclone();
     mycar.id.push(0);
     tiles.push(mycar);
+    
     // call the substitution
     tiles = substitute(
       iterations,
